@@ -54,6 +54,7 @@ const speciesSchema = z.object({
     .nullable()
     // Transform empty string or only whitespace input to null before form submission, and trim whitespace otherwise
     .transform((val) => (!val || val.trim() === "" ? null : val.trim())),
+  endangered: z.boolean(),
 });
 
 type FormData = z.infer<typeof speciesSchema>;
@@ -72,6 +73,7 @@ const defaultValues: Partial<FormData> = {
   total_population: null,
   image: null,
   description: null,
+  endangered: false,
 };
 
 export default function AddSpeciesDialog({ userId }: { userId: string }) {
@@ -99,6 +101,7 @@ export default function AddSpeciesDialog({ userId }: { userId: string }) {
         scientific_name: input.scientific_name,
         total_population: input.total_population,
         image: input.image,
+        endangered: input.endangered,
       },
     ]);
 
@@ -221,6 +224,36 @@ export default function AddSpeciesDialog({ userId }: { userId: string }) {
                           onChange={(event) => field.onChange(+event.target.value)}
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="endangered"
+                render={({ field }) => {
+                  const { value } = field; // Only destructure value, no need for rest
+
+                  return (
+                    <FormItem>
+                      <FormLabel>Endangered Status</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(value === "true")} // Convert string back to boolean
+                        value={value === undefined || value === null ? "" : value ? "true" : "false"} // Ensure proper boolean conversion
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="true">Endangered</SelectItem>
+                            <SelectItem value="false">Not Endangered</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   );

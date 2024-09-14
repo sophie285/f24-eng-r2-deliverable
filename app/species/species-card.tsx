@@ -35,6 +35,7 @@ export default function SpeciesCard({ species, sessionId }: { species: Species; 
       )}
       <h3 className="mt-3 text-2xl font-semibold">{species.scientific_name}</h3>
       <h4 className="text-lg font-light italic">{species.common_name}</h4>
+      {species.endangered && <h4 className="text-sm font-light italic text-red-500">Endangered</h4>}
       <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
       {/* Learn More Button that triggers the dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
@@ -47,6 +48,7 @@ export default function SpeciesCard({ species, sessionId }: { species: Species; 
           <DialogHeader>
             <DialogTitle>{species.scientific_name}</DialogTitle>
             <h4 className="mt-3 text-lg font-light italic">{species.common_name}</h4>
+            {species.endangered && <h4 className="text-sm font-light italic text-red-500">Endangered</h4>}
             <div className="mt-2">
               <p className="mt-2">
                 <strong>Kingdom:</strong> {species.kingdom}
@@ -59,7 +61,6 @@ export default function SpeciesCard({ species, sessionId }: { species: Species; 
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
       {/* Conditionally render the Edit and Delete buttons next to each other */}
       {isOwner && (
         <div className="mt-3 flex w-full space-x-2">

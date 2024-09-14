@@ -48,6 +48,7 @@ const speciesSchema = z.object({
     .string()
     .nullable()
     .transform((val) => (!val || val.trim() === "" ? null : val.trim())),
+  endangered: z.boolean(),
 });
 
 type FormData = z.infer<typeof speciesSchema>;
@@ -64,6 +65,7 @@ export default function EditSpeciesDialog({ species }: { species: Species }) {
     total_population: species.total_population,
     image: species.image,
     description: species.description,
+    endangered: species.endangered,
   };
 
   // Instantiate form functionality with React Hook Form, passing in the Zod schema (for validation) and default values
@@ -188,6 +190,36 @@ export default function EditSpeciesDialog({ species }: { species: Species }) {
                           onChange={(event) => field.onChange(+event.target.value)}
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="endangered"
+                render={({ field }) => {
+                  const { value } = field; // Only destructure value, no need for rest
+
+                  return (
+                    <FormItem>
+                      <FormLabel>Endangered Status</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(value === "true")} // Convert string back to boolean
+                        value={value === undefined || value === null ? "" : value ? "true" : "false"} // Ensure proper boolean conversion
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="true">Endangered</SelectItem>
+                            <SelectItem value="false">Not Endangered</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   );
