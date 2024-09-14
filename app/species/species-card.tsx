@@ -15,13 +15,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import type { Database } from "@/lib/schema";
 import Image from "next/image";
 import { useState } from "react";
+import DeleteSpeciesButton from "./delete-species-button";
 import EditSpeciesDialog from "./edit-species-dialog";
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
 export default function SpeciesCard({ species, sessionId }: { species: Species; sessionId: string }) {
   // Control whether the dialog is open or closed
   const [open, setOpen] = useState<boolean>(false);
-  // const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
 
   // Determine whether this card was created by this user
   const isOwner = species.author === sessionId;
@@ -60,25 +60,11 @@ export default function SpeciesCard({ species, sessionId }: { species: Species; 
         </DialogContent>
       </Dialog>
 
-      {/* Conditionally render the Edit button */}
-      {/* {isOwner && (
-        <div>
-          <Button className="mt-3 w-full" variant="outline" onClick={() => setIsEditDialogOpen(true)}>
-            Edit
-          </Button>
-          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-            <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
-              <DialogHeader>
-                <DialogTitle>Edit Species</DialogTitle>
-                <p>Edit functionality will go here.</p>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </div>
-      )} */}
+      {/* Conditionally render the Edit and Delete buttons next to each other */}
       {isOwner && (
-        <div>
+        <div className="mt-3 flex w-full space-x-2">
           <EditSpeciesDialog species={species} />
+          <DeleteSpeciesButton speciesId={species.id} />
         </div>
       )}
     </div>
