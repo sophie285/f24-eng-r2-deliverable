@@ -17,9 +17,12 @@ import Image from "next/image";
 import { useState } from "react";
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
-export default function SpeciesCard({ species }: { species: Species }) {
+export default function SpeciesCard({ species, sessionId }: { species: Species; sessionId: string }) {
   // Control whether the dialog is open or closed
   const [open, setOpen] = useState<boolean>(false);
+
+  // Determine whether this card was created by this user
+  const isOwner = species.author === sessionId;
 
   return (
     <div className="m-4 w-72 min-w-72 flex-none rounded border-2 p-3 shadow">
@@ -31,7 +34,6 @@ export default function SpeciesCard({ species }: { species: Species }) {
       <h3 className="mt-3 text-2xl font-semibold">{species.scientific_name}</h3>
       <h4 className="text-lg font-light italic">{species.common_name}</h4>
       <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
-
       {/* Learn More Button that triggers the dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
@@ -55,6 +57,13 @@ export default function SpeciesCard({ species }: { species: Species }) {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+
+      {/* Conditionally render the Edit button */}
+      {isOwner && (
+        <Button className="mt-3 w-full" variant="outline">
+          Edit
+        </Button>
+      )}
     </div>
   );
 }
