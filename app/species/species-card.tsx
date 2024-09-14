@@ -19,7 +19,15 @@ import DeleteSpeciesButton from "./delete-species-button";
 import EditSpeciesDialog from "./edit-species-dialog";
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
-export default function SpeciesCard({ species, sessionId }: { species: Species; sessionId: string }) {
+export default function SpeciesCard({
+  species,
+  sessionId,
+  authorName,
+}: {
+  species: Species;
+  sessionId: string;
+  authorName: string;
+}) {
   // Control whether the dialog is open or closed
   const [open, setOpen] = useState<boolean>(false);
 
@@ -57,6 +65,7 @@ export default function SpeciesCard({ species, sessionId }: { species: Species; 
                 <strong>Total Population:</strong> {species.total_population}
               </p>
               <p className="mt-2">{species.description}</p>
+              <h4 className="text-sm font-light">Author: {authorName}</h4>
             </div>
           </DialogHeader>
         </DialogContent>
