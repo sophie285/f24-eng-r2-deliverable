@@ -25,11 +25,10 @@ export default function DeleteSpeciesButton({ speciesId }: { speciesId: number }
 
     toast({
       title: "Success",
-      description: "Species successfully deleted.",
+      description: "Species successfully deleted. Reload to see updated page.",
     });
 
     setDeleteDialogOpen(false);
-    // Optionally trigger a callback to refresh the list or perform further actions after deletion
   };
 
   return (
